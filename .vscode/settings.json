@@ -1,0 +1,15 @@
+{
+    "workbench.colorTheme": "Default Dark Modern",
+    "redhat.telemetry.enabled": true,
+    "terminal.integrated.commandsToSkipShell": [
+        "github.copilot.terminal.suggestCommand",
+        "git clone https://github.com/MichalFlorianczyk/pp-lab-7.git",
+        "git clone https://github.com/MichalFlorianczyk/pp-lab-7.git"
+    ],
+    "terminal.integrated.sendKeybindingsToShell": true,
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "C:\\Program Files\\Java\\javafx-sdk-17.0.0.1\\lib\\*.jar"
+    ]
+}
+
