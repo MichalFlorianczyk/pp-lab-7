@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,6 +14,7 @@ public class Main extends Application {
 
     private TextField directoryPathField;
     private TextField searchField;
+    private TextArea resultArea;
 
     public static void main(String[] args) {
         launch(args);
@@ -22,21 +24,30 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("File Browser and Search");
 
+        // Inicjalizacja TextFields
         directoryPathField = new TextField();
         directoryPathField.setPromptText("Enter directory path");
 
         searchField = new TextField();
         searchField.setPromptText("Enter search phrase");
 
+        // Inicjalizacja TextArea
+        resultArea = new TextArea();
+        resultArea.setPrefHeight(400); // Ustawienie preferowanej wysokości na 400
+
+        // Inicjalizacja przycisków
         Button browseButton = new Button("Browse");
         browseButton.setOnAction(event -> browseDirectory());
 
         Button searchButton = new Button("Search");
+        searchButton.setOnAction(event -> searchFiles()); // Dodanie obsługi zdarzenia
 
+        // Ustawienia layoutu
         HBox hBox = new HBox(10, directoryPathField, browseButton);
-        VBox vBox = new VBox(10, hBox, searchField, searchButton);
+        VBox vBox = new VBox(10, hBox, searchField, searchButton, resultArea); // Dodanie resultArea jako kolejnego
+                                                                               // parametru
 
-        Scene scene = new Scene(vBox, 600, 200);
+        Scene scene = new Scene(vBox, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -47,6 +58,35 @@ public class Main extends Application {
 
         if (selectedDirectory != null) {
             directoryPathField.setText(selectedDirectory.getAbsolutePath());
+        }
+    }
+
+    private void searchFiles() {
+        String directoryPath = directoryPathField.getText();
+        if (directoryPath.isEmpty()) {
+            resultArea.setText("Please provide a directory path.");
+            return;
+        }
+
+        File directory = new File(directoryPath);
+        if (!directory.isDirectory()) {
+            resultArea.setText("The provided path is not a directory.");
+            return;
+        }
+
+        StringBuilder results = new StringBuilder();
+        listFilesInDirectory(directory, results);
+        resultArea.setText(results.toString());
+    }
+
+    private void listFilesInDirectory(File directory, StringBuilder results) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    results.append(file.getName()).append("\n");
+                }
+            }
         }
     }
 }
